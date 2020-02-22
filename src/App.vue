@@ -1,32 +1,40 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+	<div id="app">
+		<main-menu></main-menu>
+		<router-view class="main" />
+	</div>
 </template>
 
+<script>
+import MainMenu from './components/MainMenu';
+
+export default {
+	name: 'App',
+	components: {
+		MainMenu
+	}
+};
+</script>
+
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
 }
 
-#nav {
-  padding: 30px;
+#app {
+	background-color: white;
+	height: 100vh;
+	font-family: 'Lato', sans-serif;
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+	.main {
+		//border: 2px solid gray;
+		padding: 4rem 5rem;
+		width: 90%;
+		margin: 0 auto;
+		border-radius: 5px;
+		margin-left: 3.75rem;
+	}
 }
 </style>
