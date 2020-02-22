@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <main-menu></main-menu>
+
     <router-view class="main" />
   </div>
 </template>
@@ -12,9 +13,6 @@ export default {
   name: "App",
   components: {
     MainMenu
-  },
-  mounted() {
-    alert("I LIKE YOU A LOT <3");
   }
 };
 </script>
@@ -27,8 +25,7 @@ export default {
 }
 
 #app {
-  background-color: white;
-  height: 100vh;
+  background-color: $background;
   font-family: "Lato", sans-serif;
 
   .main {
