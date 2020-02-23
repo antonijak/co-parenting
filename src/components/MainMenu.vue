@@ -73,7 +73,7 @@ export default {
     }
 
     .active {
-      background-color: white;
+      background-color: $background;
       width: 100%;
       margin-right: -2px;
       padding-right: calc(0.5rem + 2px);

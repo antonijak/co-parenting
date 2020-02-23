@@ -22,34 +22,99 @@
       <li v-for="blank in firstDayOfMonth" :key="blank + month + 'dates'" class="blank"></li>
 
       <li
-        v-for="(date, index) in daysInMonth"
-        :key="date"
+        v-for="(day, index) in daysInMonth"
+        :key="day.date + index"
         :class="{
 					'current-day':
-						date == initialDate && month == initialMonth && year == initialYear,
+						day.date == initialDate && month == initialMonth && year == initialYear,
 					last:
 						(firstDayOfMonth + daysInMonth) % 7 > 0 && index === daysInMonth - 1
 				}"
         class="day"
+        @click="handleDateClick(day.moment)"
       >
-        <span>{{ date }}</span>
+        <span class="day__date">{{ day.date}}</span>
+
+        <ul class="day__events">
+          <li
+            v-for="(event, innerIndex) in day.events"
+            :key="event.id + innerIndex"
+            class="day__events__event"
+            :class="{
+				'multiple-left': daysInMonth[index -1] !== undefined && daysInMonth[index -1].events.some(item => item.title === event.title), 
+				'multiple-right': daysInMonth[index +1] !== undefined && daysInMonth[index +1].events.some(item => item.title === event.title),
+				'passed': hasPassed(event.moment) 
+			}"
+          >{{event.title}}</li>
+        </ul>
       </li>
     </ul>
+    <popup
+      v-if="popup === true"
+      @close="popup = false"
+      @save="saveEvent"
+      :beginning="eventStart"
+      :today="today"
+    ></popup>
   </div>
 </template>
 
 <script>
+import Popup from "./Popup";
+
 export default {
   name: "Calendar",
+  components: {
+    Popup
+  },
   mounted() {},
+
   data() {
     return {
       today: this.$moment(),
       dateContext: this.$moment(),
-      days: ["M", "T", "W", "T", "F", "S", "S"]
+      days: [
+        "Maanantai",
+        "Tiistai",
+        "Keskiviikko",
+        "Torstai",
+        "Perjantai",
+        "Lauantai",
+        "Sunnuntai"
+      ],
+      events: [],
+      popup: false,
+      eventStart: null
     };
   },
   methods: {
+    hasPassed(moment) {
+      console.log(moment);
+      return (
+        this.$moment(moment).isBefore(this.$moment(this.today)) &&
+        this.$moment(moment)._i !==
+          this.$moment(this.today).format("MM-DD-YYYY")
+      );
+    },
+    handleDateClick(date) {
+      console.log("bka", date);
+
+      this.eventStart = date;
+      this.popup = true;
+    },
+    saveEvent(data) {
+      console.log("the event", data.event);
+      this.events.push({
+        id: this.$uuid.v4(),
+        moment: data.event.moment,
+        start: data.event.start,
+        ending: data.event.ending,
+        title: data.event.title,
+        description: data.event.description
+      });
+
+      this.popup = false;
+    },
     addMonth() {
       return (this.dateContext = this.$moment(this.dateContext).add(
         1,
@@ -71,7 +136,23 @@ export default {
       return this.dateContext.format("MMMM");
     },
     daysInMonth() {
-      return this.dateContext.daysInMonth();
+      let numberOfDays = this.dateContext.daysInMonth();
+      let days = [];
+
+      for (let i = 0; i < numberOfDays; i++) {
+        let fullDate =
+          this.dateContext.format("MM") + "-" + (i + 1) + "-" + this.year;
+        console.log("events", this.events);
+        let events = this.events.filter(item => item.moment._i === fullDate);
+
+        days.push({
+          date: i + 1,
+          moment: this.$moment(fullDate, "MM-DD-YYYY"),
+          events
+        });
+      }
+
+      return days;
     },
     currentDate() {
       return this.dateContext.get("date");
@@ -176,17 +257,59 @@ export default {
     }
 
     .day {
-      height: 6rem;
+      min-height: 6rem;
+
+      &__events {
+        padding: 0;
+        width: 100%;
+        margin-top: 5px;
+
+        &__event {
+          list-style: none;
+          background-color: $primary;
+
+          font-size: 0.8rem;
+          letter-spacing: 0.5px;
+          color: white;
+          padding: 4px;
+          width: 95%;
+          border-radius: 3px;
+          margin: 0 auto;
+          margin-bottom: 4px;
+        }
+
+        .multiple-left {
+          margin-left: -1px;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
+
+        .multiple-right {
+          margin-right: 0;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+
+        .multiple-left.multiple-right {
+          width: calc(100% + 1px);
+        }
+
+        .passed {
+          opacity: 0.5;
+        }
+      }
+    }
+
+    .last {
+      border-right: 1px solid rgb(221, 221, 221);
     }
 
     .current-day {
       color: $primary;
       border: 1px solid $primary;
-      margin-top: -1px;
-    }
+      border-right: 1px solid $primary !important;
 
-    .last {
-      border-right: 1px solid rgb(221, 221, 221);
+      margin-top: -1px;
     }
   }
 }
