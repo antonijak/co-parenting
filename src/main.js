@@ -4,6 +4,7 @@ import router from './router';
 import store from './store';
 import UUID from 'vue-uuid';
 import moment from 'vue-moment';
+
 import 'vue-awesome/icons';
 import Icon from 'vue-awesome/components/Icon';
 Vue.component('v-icon', Icon);
