@@ -143,6 +143,7 @@ export default {
 			this.viewedEvent = event;
 		},
 		deleteEvent({ eventId }) {
+			// TODO delete for one or multiple days
 			console.log('delete');
 			this.allEvents = this.allEvents.filter(event => event.id !== eventId);
 		},
@@ -211,6 +212,7 @@ export default {
 				}
 			}
 			this.popup = false;
+			this.viewedEvent = null;
 		},
 		addMonth() {
 			return (this.dateContext = this.$moment(this.dateContext).add(
