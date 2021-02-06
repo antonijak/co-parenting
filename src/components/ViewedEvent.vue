@@ -17,7 +17,7 @@
 			 
 			<p>{{ event.description }}</p>
 			<span>Start: {{ event.start.format('DD-MM-YYYY') }}</span>
-			<br></br>
+			
 			<span>End: {{ event.ending.format('DD-MM-YYYY') }}</span>
 		</div>
 	</div>

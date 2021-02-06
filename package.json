@@ -10,6 +10,7 @@
 		"core-js": "^3.6.4",
 		"date-fns": "^2.10.0",
 		"moment-range": "^4.0.2",
+		"sass": "^1.32.6",
 		"vue": "^2.6.11",
 		"vue-awesome": "^4.0.2",
 		"vue-moment": "^4.1.0",
@@ -22,7 +23,6 @@
 		"@vue/cli-plugin-router": "~4.2.0",
 		"@vue/cli-plugin-vuex": "~4.2.0",
 		"@vue/cli-service": "~4.2.0",
-		"node-sass": "^4.12.0",
 		"sass-loader": "^8.0.2",
 		"vue-template-compiler": "^2.6.11"
 	}

@@ -113,18 +113,34 @@ export default {
 	},
 	methods: {
 		save() {
-			let event = {
-				moment: this.beginning,
-				start: this.start,
-				ending: this.ending,
-				title: this.title,
-				description: this.description
-			};
+			if (this.event !== null) {
+				let event = {
+					id: this.event.id,
+					moment: this.beginning,
+					start: this.start,
+					ending: this.ending,
+					title: this.title,
+					description: this.description
+				};
 
-			this.$emit('save', {
-				event,
-				edit: this.event !== null
-			});
+				this.$emit('save', {
+					event,
+					edit: true
+				});
+			} else {
+				let event = {
+					moment: this.beginning,
+					start: this.start,
+					ending: this.ending,
+					title: this.title,
+					description: this.description
+				};
+
+				this.$emit('save', {
+					event,
+					edit: false
+				});
+			}
 		}
 	}
 };
